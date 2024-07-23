@@ -161,14 +161,52 @@ namespace Assignment3.Utility
 		/// Removes last element from list
 		/// </summary>
 		/// <exception cref="CannotRemoveException">Thrown if list is empty.</exception>
-		void RemoveLast();
+		void RemoveLast()
+		{
+			bool empty = IsEmpty();
+			if (empty == true)
+			{
+				throw new CannotRemoveException();
+			}
+			else
+			{
+				Node current = head;
+				Node previous = null;
+				while (current.address != null)
+				{
+					previous = current;
+					current = current.address;
+				}
+				previous.address = null;
+				count--;
+			}
+		}
 
 		/// <summary>
 		/// Removes element at index from list, reducing the size.
 		/// </summary>
 		/// <param name="index">Index of element to remove.</param>
 		/// <exception cref="IndexOutOfRangeException">Thrown if index is negative or larger than size - 1 of list.</exception>
-		void Remove(int index);
+		void Remove(int index)
+		{
+			if (index < 0 || index >= count)
+			{
+				throw new IndexOutOfRangeException("Index out of the range");
+			}
+			else
+			{
+				Node current = head;
+				Node previous = null;
+				for (int i = 0; i < index; i++)
+				{
+					previous = current;
+					current = current.address;
+				}
+				previous.address = current.address;
+				count--;
+
+			}
+		}
 
 		/// <summary>
 		/// Gets the value at the specified index.
@@ -176,21 +214,80 @@ namespace Assignment3.Utility
 		/// <param name="index">Index of element to get.</param>
 		/// <returns>Value of node at index</returns>
 		/// <exception cref="IndexOutOfRangeException">Thrown if index is negative or larger than size - 1 of list.</exception>
-		User GetValue(int index);
+		User GetValue(int index)
+		{
+			if (index < 0 || index >= count)
+			{
+				throw new IndexOutOfRangeException("Index out of the range");
+			}
+			else
+			{
+				Node current = head;
+				for (int i = 0; i < index; i++)
+				{
+					current = current.address;
+				}
+				return current.data;
+			}
+		}
+
 
 		/// <summary>
 		/// Gets the first index of element containing value.
 		/// </summary>
 		/// <param name="value">Value to find index of.</param>
 		/// <returns>First of index of node with matching value or -1 if not found.</returns>
-		int IndexOf(User value);
+		int IndexOf(User value)
+		{
+			int index = -1;
+			Node current = head;
+			for (int i = 0; i < count; i++)
+			{
+				if (current.data == value)
+				{
+					index = i;
+					break;
+				}
+				current = current.address;
+			}
+			if (index == -1)
+			{
+				return -1;
+			}
+			else
+			{
+				return index;
+			}
+		}
 
 		/// <summary>
 		/// Go through nodes and check if one has value.
 		/// </summary>
 		/// <param name="value">Value to find index of.</param>
 		/// <returns>True if element exists with value.</returns>
-		bool Contains(User value);
+		bool Contains(User value)
+		{
+			int index = -1;
+			Node current = head;
+			for (int i = 0; i < count; i++)
+			{
+				if (current.data == value)
+				{
+					index = i;
+					break;
+				}
+				current = current.address;
+			}
+			if (index == -1)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+
 
 	}
 }
