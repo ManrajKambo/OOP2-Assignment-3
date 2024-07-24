@@ -17,7 +17,7 @@ namespace Assignment3.Utility
 		/// Checks if the list is empty.
 		/// </summary>
 		/// <returns>True if it is empty.</returns>
-		bool IsEmpty()
+		public bool IsEmpty()
 		{
 			if (head == null)
 			{
@@ -32,7 +32,7 @@ namespace Assignment3.Utility
 		/// <summary>
 		/// Clears the list.
 		/// </summary>
-		void Clear()
+		public void Clear()
 		{
 			head = null;
 			tail = null;
@@ -43,7 +43,7 @@ namespace Assignment3.Utility
 		/// Adds to the end of the list.
 		/// </summary>
 		/// <param name="value">Value to append.</param>
-		void AddLast(User value)
+		public void AddLast(User value)
 		{
 			Node newNode = new Node(value);
 			if (head == null)
@@ -66,7 +66,7 @@ namespace Assignment3.Utility
 		/// Prepends (adds to beginning) value to the list.
 		/// </summary>
 		/// <param name="value">Value to store inside element.</param>
-		void AddFirst(User value)
+		public void AddFirst(User value)
 		{
 			Node newNode = new Node(value);
 			newNode.address = head;
@@ -74,14 +74,13 @@ namespace Assignment3.Utility
 			count++;
 		}
 
-
 		/// <summary>
 		/// Adds a new element at a specific position.
 		/// </summary>
 		/// <param name="value">Value that element is to contain.</param>
 		/// <param name="index">Index to add new element at.</param>
 		/// <exception cref="IndexOutOfRangeException">Thrown if index is negative or past the size of the list.</exception>
-		void Add(User value, int index)
+		public void Add(User value, int index)
 		{
 			Node newNode = new Node(value);
 			if (index < 0 || index >= count)
@@ -107,7 +106,7 @@ namespace Assignment3.Utility
 		/// <param name="value">Value to replace.</param>
 		/// <param name="index">Index of element to replace.</param>
 		/// <exception cref="IndexOutOfRangeException">Thrown if index is negative or larger than size - 1 of list.</exception>
-		void Replace(User value, int index)
+		public void Replace(User value, int index)
 		{
 			Node newNode = new Node(value);
 			if (index < 0 || index >= count)
@@ -126,12 +125,11 @@ namespace Assignment3.Utility
 			}
 		}
 
-
 		/// <summary>
 		/// Gets the number of elements in the list.
 		/// </summary>
 		/// <returns>Size of list (0 meaning empty)</returns>
-		int Count()
+		public int Count()
 		{
 			int listCount = 0;
 			for (int i = 1; i < count; i++)
@@ -145,11 +143,21 @@ namespace Assignment3.Utility
 		/// Removes first element from list
 		/// </summary>
 		/// <exception cref="CannotRemoveException">Thrown if list is empty.</exception>
-		void RemoveFirst()
+		public void RemoveFirst()
 		{
-			bool empty = IsEmpty();
+            bool empty = IsEmpty();
+            try
+            {
+				head = head.address;
+			}
+			catch
+			{
+
+			}
 			if (empty == true)
-			{ throw new CannotRemoveException(); } // needs user defined exception class made for it I think
+			{ 
+				throw new CannotRemoveException("Cannot remove the specified item as the list is empty"); 
+			} 
 			else
 			{
 				head = head.address;
@@ -161,12 +169,12 @@ namespace Assignment3.Utility
 		/// Removes last element from list
 		/// </summary>
 		/// <exception cref="CannotRemoveException">Thrown if list is empty.</exception>
-		void RemoveLast()
+		public void RemoveLast()
 		{
 			bool empty = IsEmpty();
 			if (empty == true)
 			{
-				throw new CannotRemoveException();
+				throw new CannotRemoveException("Cannot remove the specified item as the list is empty");
 			}
 			else
 			{
@@ -187,7 +195,7 @@ namespace Assignment3.Utility
 		/// </summary>
 		/// <param name="index">Index of element to remove.</param>
 		/// <exception cref="IndexOutOfRangeException">Thrown if index is negative or larger than size - 1 of list.</exception>
-		void Remove(int index)
+		public void Remove(int index)
 		{
 			if (index < 0 || index >= count)
 			{
@@ -214,7 +222,7 @@ namespace Assignment3.Utility
 		/// <param name="index">Index of element to get.</param>
 		/// <returns>Value of node at index</returns>
 		/// <exception cref="IndexOutOfRangeException">Thrown if index is negative or larger than size - 1 of list.</exception>
-		User GetValue(int index)
+		public User GetValue(int index)
 		{
 			if (index < 0 || index >= count)
 			{
@@ -231,13 +239,12 @@ namespace Assignment3.Utility
 			}
 		}
 
-
 		/// <summary>
 		/// Gets the first index of element containing value.
 		/// </summary>
 		/// <param name="value">Value to find index of.</param>
 		/// <returns>First of index of node with matching value or -1 if not found.</returns>
-		int IndexOf(User value)
+		public int IndexOf(User value)
 		{
 			int index = -1;
 			Node current = head;
@@ -265,7 +272,7 @@ namespace Assignment3.Utility
 		/// </summary>
 		/// <param name="value">Value to find index of.</param>
 		/// <returns>True if element exists with value.</returns>
-		bool Contains(User value)
+		public bool Contains(User value)
 		{
 			int index = -1;
 			Node current = head;
