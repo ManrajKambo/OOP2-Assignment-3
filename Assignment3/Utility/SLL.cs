@@ -1,300 +1,213 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace Assignment3.Utility
 {
-	public class SLL : ILinkedListADT
-	{
-		public Node head { get; set; }
-		public Node tail { get; set; }
-		public int count { get; set; }
+    [DataContract]
+    public class SLL : ILinkedListADT
+    {
+        [DataMember]
+        public Node head { get; set; }
 
-		/// <summary>
-		/// Checks if the list is empty.
-		/// </summary>
-		/// <returns>True if it is empty.</returns>
-		public bool IsEmpty()
-		{
-			if (head == null)
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
-		}
+        [DataMember]
+        public Node tail { get; set; }
 
-		/// <summary>
-		/// Clears the list.
-		/// </summary>
-		public void Clear()
-		{
-			head = null;
-			tail = null;
-			count = 0;
-		}
+        [DataMember]
+        public int count { get; set; }
 
-		/// <summary>
-		/// Adds to the end of the list.
-		/// </summary>
-		/// <param name="value">Value to append.</param>
-		public void AddLast(User value)
-		{
-			Node newNode = new Node(value);
-			if (head == null)
-			{
-				head = newNode;
-			}
-			else
-			{
-				Node current = head;
-				while (current.address != null)
-				{
-					current = current.address;
-				}
-				current.address = newNode;
-			}
-			count++;
-		}
+        public bool IsEmpty()
+        {
+            return head == null;
+        }
 
-		/// <summary>
-		/// Prepends (adds to beginning) value to the list.
-		/// </summary>
-		/// <param name="value">Value to store inside element.</param>
-		public void AddFirst(User value)
-		{
-			Node newNode = new Node(value);
-			newNode.address = head;
-			head = newNode;
-			count++;
-		}
+        public void Clear()
+        {
+            head = null;
+            tail = null;
+            count = 0;
+        }
 
-		/// <summary>
-		/// Adds a new element at a specific position.
-		/// </summary>
-		/// <param name="value">Value that element is to contain.</param>
-		/// <param name="index">Index to add new element at.</param>
-		/// <exception cref="IndexOutOfRangeException">Thrown if index is negative or past the size of the list.</exception>
-		public void Add(User value, int index)
-		{
-			Node newNode = new Node(value);
-			if (index < 0 || index >= count)
-			{
-				throw new IndexOutOfRangeException("Index out of the range");
-			}
-			else
-			{
-				Node current = head;
-				for (int i = 0; i < index; i++)
-				{
-					current = current.address;
-				}
-				newNode.address = current.address;
-				current.address = newNode;
-				count++;
-			}
-		}
-
-		/// <summary>
-		/// Replaces the value  at index.
-		/// </summary>
-		/// <param name="value">Value to replace.</param>
-		/// <param name="index">Index of element to replace.</param>
-		/// <exception cref="IndexOutOfRangeException">Thrown if index is negative or larger than size - 1 of list.</exception>
-		public void Replace(User value, int index)
-		{
-			Node newNode = new Node(value);
-			if (index < 0 || index >= count)
-			{
-				throw new IndexOutOfRangeException("Index out of the range");
-			}
-			else
-			{
-				Node current = head;
-				for (int i = 0; i < index + 1; i++)
-				{
-					current = current.address;
-					if (i == index - 1) { current.address = newNode; }
-					if (i == index + 1) { newNode.address = current.address; }
-				}
-			}
-		}
-
-		/// <summary>
-		/// Gets the number of elements in the list.
-		/// </summary>
-		/// <returns>Size of list (0 meaning empty)</returns>
-		public int Count()
-		{
-			int listCount = 0;
-			for (int i = 1; i < count; i++)
-			{
-				listCount++;
-			}
-			return listCount;
-		}
-
-		/// <summary>
-		/// Removes first element from list
-		/// </summary>
-		/// <exception cref="CannotRemoveException">Thrown if list is empty.</exception>
-		public void RemoveFirst()
-		{
-            bool empty = IsEmpty();
-            try
+        public void AddLast(User value)
+        {
+            Node newNode = new Node(value);
+            if (head == null)
             {
-				head = head.address;
-			}
-			catch
-			{
+                head = newNode;
+                tail = newNode;
+            }
+            else
+            {
+                tail.address = newNode;
+                tail = newNode;
+            }
+            count++;
+        }
 
-			}
-			if (empty == true)
-			{ 
-				throw new CannotRemoveException("Cannot remove the specified item as the list is empty"); 
-			} 
-			else
-			{
-				head = head.address;
-				count--;
-			}
-		}
+        public void AddFirst(User value)
+        {
+            Node newNode = new Node(value);
+            newNode.address = head;
+            head = newNode;
+            if (count == 0)
+            {
+                tail = head;
+            }
+            count++;
+        }
 
-		/// <summary>
-		/// Removes last element from list
-		/// </summary>
-		/// <exception cref="CannotRemoveException">Thrown if list is empty.</exception>
-		public void RemoveLast()
-		{
-			bool empty = IsEmpty();
-			if (empty == true)
-			{
-				throw new CannotRemoveException("Cannot remove the specified item as the list is empty");
-			}
-			else
-			{
-				Node current = head;
-				Node previous = null;
-				while (current.address != null)
-				{
-					previous = current;
-					current = current.address;
-				}
-				previous.address = null;
-				count--;
-			}
-		}
+        public void Add(User value, int index)
+        {
+            if (index < 0 || index > count)
+            {
+                throw new IndexOutOfRangeException("Index out of the range");
+            }
 
-		/// <summary>
-		/// Removes element at index from list, reducing the size.
-		/// </summary>
-		/// <param name="index">Index of element to remove.</param>
-		/// <exception cref="IndexOutOfRangeException">Thrown if index is negative or larger than size - 1 of list.</exception>
-		public void Remove(int index)
-		{
-			if (index < 0 || index >= count)
-			{
-				throw new IndexOutOfRangeException("Index out of the range");
-			}
-			else
-			{
-				Node current = head;
-				Node previous = null;
-				for (int i = 0; i < index; i++)
-				{
-					previous = current;
-					current = current.address;
-				}
-				previous.address = current.address;
-				count--;
+            if (index == 0)
+            {
+                AddFirst(value);
+                return;
+            }
 
-			}
-		}
+            if (index == count)
+            {
+                AddLast(value);
+                return;
+            }
 
-		/// <summary>
-		/// Gets the value at the specified index.
-		/// </summary>
-		/// <param name="index">Index of element to get.</param>
-		/// <returns>Value of node at index</returns>
-		/// <exception cref="IndexOutOfRangeException">Thrown if index is negative or larger than size - 1 of list.</exception>
-		public User GetValue(int index)
-		{
-			if (index < 0 || index >= count)
-			{
-				throw new IndexOutOfRangeException("Index out of the range");
-			}
-			else
-			{
-				Node current = head;
-				for (int i = 0; i < index; i++)
-				{
-					current = current.address;
-				}
-				return current.data;
-			}
-		}
+            Node newNode = new Node(value);
+            Node current = head;
+            for (int i = 1; i < index; i++)
+            {
+                current = current.address;
+            }
+            newNode.address = current.address;
+            current.address = newNode;
+            count++;
+        }
 
-		/// <summary>
-		/// Gets the first index of element containing value.
-		/// </summary>
-		/// <param name="value">Value to find index of.</param>
-		/// <returns>First of index of node with matching value or -1 if not found.</returns>
-		public int IndexOf(User value)
-		{
-			int index = -1;
-			Node current = head;
-			for (int i = 0; i < count; i++)
-			{
-				if (current.data == value)
-				{
-					index = i;
-					break;
-				}
-				current = current.address;
-			}
-			if (index == -1)
-			{
-				return -1;
-			}
-			else
-			{
-				return index;
-			}
-		}
+        public void Replace(User value, int index)
+        {
+            if (index < 0 || index >= count)
+            {
+                throw new IndexOutOfRangeException("Index out of the range");
+            }
 
-		/// <summary>
-		/// Go through nodes and check if one has value.
-		/// </summary>
-		/// <param name="value">Value to find index of.</param>
-		/// <returns>True if element exists with value.</returns>
-		public bool Contains(User value)
-		{
-			int index = -1;
-			Node current = head;
-			for (int i = 0; i < count; i++)
-			{
-				if (current.data == value)
-				{
-					index = i;
-					break;
-				}
-				current = current.address;
-			}
-			if (index == -1)
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
-		}
+            Node current = head;
+            for (int i = 0; i < index; i++)
+            {
+                current = current.address;
+            }
+            current.data = value;
+        }
 
+        public int Count()
+        {
+            return count;
+        }
 
-	}
+        public void RemoveFirst()
+        {
+            if (IsEmpty())
+            {
+                throw new CannotRemoveException("Cannot remove the specified item as the list is empty");
+            }
+
+            head = head.address;
+            count--;
+
+            if (count == 0)
+            {
+                tail = null;
+            }
+        }
+
+        public void RemoveLast()
+        {
+            if (IsEmpty())
+            {
+                throw new CannotRemoveException("Cannot remove the specified item as the list is empty");
+            }
+
+            if (count == 1)
+            {
+                head = null;
+                tail = null;
+            }
+            else
+            {
+                Node current = head;
+                while (current.address != tail)
+                {
+                    current = current.address;
+                }
+                current.address = null;
+                tail = current;
+            }
+            count--;
+        }
+
+        public void Remove(int index)
+        {
+            if (index < 0 || index >= count)
+            {
+                throw new IndexOutOfRangeException("Index out of the range");
+            }
+
+            if (index == 0)
+            {
+                RemoveFirst();
+                return;
+            }
+
+            if (index == count - 1)
+            {
+                RemoveLast();
+                return;
+            }
+
+            Node current = head;
+            Node previous = null;
+            for (int i = 0; i < index; i++)
+            {
+                previous = current;
+                current = current.address;
+            }
+            previous.address = current.address;
+            count--;
+        }
+
+        public User GetValue(int index)
+        {
+            if (index < 0 || index >= count)
+            {
+                throw new IndexOutOfRangeException("Index out of the range");
+            }
+
+            Node current = head;
+            for (int i = 0; i < index; i++)
+            {
+                current = current.address;
+            }
+            return current.data;
+        }
+
+        public int IndexOf(User value)
+        {
+            Node current = head;
+            for (int i = 0; i < count; i++)
+            {
+                if (current.data.Equals(value))
+                {
+                    return i;
+                }
+                current = current.address;
+            }
+            return -1;
+        }
+
+        public bool Contains(User value)
+        {
+            return IndexOf(value) != -1;
+        }
+    }
 }

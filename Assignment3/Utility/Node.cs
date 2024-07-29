@@ -1,20 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace Assignment3.Utility
 {
-	public class Node
-	{
-		public User data { get; set; }
-		public Node address { get; set; }
+    [DataContract]
+    public class Node
+    {
+        [DataMember]
+        public User data { get; set; }
 
-		public Node(User Data)
-		{
-			this.data = Data;
-			this.address = null;
-		}
-	}
+        [DataMember]
+        public Node address { get; set; }
+
+        public Node(User Data)
+        {
+            this.data = Data;
+            this.address = null;
+        }
+    }
 }
